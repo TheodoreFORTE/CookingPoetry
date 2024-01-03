@@ -5,6 +5,7 @@ from nltk.tokenize import word_tokenize
 from nltk.lm.vocabulary import Vocabulary
 
 from tools.vocabulary_handler import VocabularyHandler
+from tools.corpus_handler import CorpusHandler
 
 
 
@@ -26,9 +27,13 @@ for xml_file in fileids:
             full_corpus.append(element.text)
 
 all_text = ' '.join(full_corpus)
+
+
+
 tokens = word_tokenize(all_text)
 vocabulary=Vocabulary(tokens,unk_cutoff=2)
 
 
 VocabularyHandler.save_vocabulary(vocabulary,"shakespearian")
+CorpusHandler.save_corpus(full_corpus,"shakespearian")
 
