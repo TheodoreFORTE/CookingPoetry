@@ -1,1 +1,4 @@
 CookPoet_env/
+learning*
+nltk_data/
+*/__pycache__/
