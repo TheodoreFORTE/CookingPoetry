@@ -26,6 +26,7 @@ class VocabularyHandler:
                     vocab.counts=vocab_data["counts"]
                     vocab.unk_label=vocab_data["unk_label"]
                     vocab._cutoff=vocab_data["unk_cutoff"]
+                    vocab.update()
 
                     return vocab
 
