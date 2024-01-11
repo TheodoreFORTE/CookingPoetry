@@ -1,21 +1,24 @@
 from nltk.corpus import cmudict
 from .vocabulary_handler import VocabularyHandler
-from nltk.tokenize import wordpunct_tokenize
+
 
 class Verse:
     
-    punct = set(['.', ',', '!', ':', ';','\''])
+    punct = set(['.', ',', '!', ':', ';','\'','?'])
     pron_dict=cmudict.dict()
 
 
-    def __init__(self,content):
+    def __init__(self,text=None,allow_end_of_sentence=False,could_be_end_by_dot=True):
 
-        self.content=content
-    
+        if(text):
+            self.content=text.split()
+        else:
+            self.content=[]
+        self.allow_end_of_sentence=allow_end_of_sentence
+
     @property
     def to_wordpunct_token(self):
-        tokens=wordpunct_tokenize(self.content)
-        filtered=[w for w in tokens if w not in Verse.punct]
+        filtered=[w for w in self.content if w not in Verse.punct]
         return filtered
 
     @property 
@@ -38,4 +41,25 @@ class Verse:
             return rhyme
         else: 
             print(f"{last_word}'s pronunciation not found")
+    
+
+    def add(self,text):
+
+        list=text.split()       
+        for text in list:
+            self.content.append(text)
+
+    def check_integrity(self):
+
+        if(self.allow_end_of_sentence==False):
+            for token in self.content: 
+                if token in [".","?","!"]:
+                    return False
+        return True
+
+    def empty(self):
+
+        self.content=[]
+
+
         
