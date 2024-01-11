@@ -3,6 +3,7 @@ from .vocabulary_handler import VocabularyHandler
 from nltk.util import ngrams 
 from nltk.lm.counter import NgramCounter
 from nltk.tokenize import word_tokenize
+from nltk.lm.api import LanguageModel
 
 
 class DataPreparation: 
@@ -18,8 +19,6 @@ class DataPreparation:
         self.vocabulary=VocabularyHandler.load_vocabulary(vocab_label)
         self.corpus=CorpusHandler.load_corpus(corpus_label)
         self.sentences=[word_tokenize(sent) for sent in self.corpus]
-
-
         self.ngram_counter=self.fill_ngrams(ngram_ids)
 
     def fill_ngrams(self, ngram_ids):
@@ -29,8 +28,24 @@ class DataPreparation:
             ngram_list+=list(tuple(ngrams(sent, i)) for sent in self.sentences)
     
         return NgramCounter(ngram_list)
+    
+    @property
+    def reversed_sentences(self):
+        copy_sentences=self.sentences.copy()
+        copy_sentences=[list(reversed(sentence)) for sentence in copy_sentences]
+        return copy_sentences
 
-    def training_data_ngrams(sentence):
-
-        return ngrams(sentence,3)
-   
+    def add_model(self,model):
+        
+        if(isinstance(model,LanguageModel)):
+            self.model=model
+        else: 
+            print("You must use an object from the nltk.lm.LanguageModel class")
+    
+    def train_model(self,reversed=False):
+        if(reversed==False):
+            self.model.fit([self.sentences])
+        else: 
+            self.model.fit([self.reversed_sentences])
+        
+    
